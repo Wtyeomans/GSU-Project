@@ -28,10 +28,14 @@ directory *curr;
 void mkfs(void){
     map<string,directory>root;
 	root.clear();
-	directory a("root");
-	root.insert(pair<string,directory>("root",a));
-	curr = &a;
+	directory root("root");
+	root.insert(pair<string,directory>("root",root));
+	curr = &root;
 	cout<<"System has been formatted"<<endl;
+}
+
+void mkdir(string name){
+directory name("name");
 }
 
 void mkfl(string a){
