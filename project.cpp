@@ -28,9 +28,9 @@ directory *curr;
 void mkfs(void){
     map<string,directory>root;
 	root.clear();
-	directory root("root");
-	root.insert(pair<string,directory>("root",root));
-	curr = &root;
+	directory a("root");
+	root.insert(pair<string,directory>("root",a));
+	curr = &a;
 	cout<<"System has been formatted"<<endl;
 }
 
