@@ -36,6 +36,7 @@ void mkfs(void){
 
 void mkdir(string name){
 directory name("name");
+cout<<"directory "<< name <<" created!"<<endl;
 }
 
 void mkfl(string a){
