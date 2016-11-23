@@ -9,6 +9,7 @@ using namespace std;
 
 bool status = 1;
 
+
 class directory{
 public:
 	string title;
@@ -26,12 +27,20 @@ public:
 directory *curr;
 
 void mkfs(void){
-    map<string,directory>root;
+    	map<string,directory>root;
 	root.clear();
 	directory a("root");
 	root.insert(pair<string,directory>("root",a));
 	curr = &a;
 	cout<<"System has been formatted"<<endl;
+}
+
+void mkdir(string name){
+string temp = name;
+directory b(temp);
+cout<<"directory "<<b.title<<" created!"<<endl;
+curr->children.insert(pair<string,directory>(temp,b));
+	
 }
 
 
@@ -71,6 +80,10 @@ string parameter;
 	if (command=="mkfs"){
 		mkfs();
 	}
+	if(command =="mkdir"){
+	mkdir(parameter);
+	}
+
 	
 	}while(status ==  1);
 }
