@@ -34,10 +34,6 @@ void mkfs(void){
 	cout<<"System has been formatted"<<endl;
 }
 
-void mkdir(string name){
-directory name("name");
-cout<<"directory "<< name <<" created!"<<endl;
-}
 
 void mkfl(string a){
     curr->files[curr->numfiles] = a;
