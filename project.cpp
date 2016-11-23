@@ -7,7 +7,7 @@
 
 using namespace std;
 
-bool status;
+bool status = 1;
 
 class directory{
 public:
@@ -40,9 +40,10 @@ void mkfl(string a){
     curr->numfiles++;
 }
 
-void name(string d){
-cout<<d<<endl;
+bool exit(){
+return false;
 }
+
 
 void shell_loop(void){
 string input;
@@ -63,19 +64,14 @@ string parameter;
 	}
 }
 	if (command=="exit"){
-	break;
+	//break;
+	status = exit();
 	}
 	if (command=="mkfs"){
 		mkfs();
 	}
-	if (command=="name"){
-	if(parameter == "" ){
-	cout<<"no parameter"<<endl;}
-	else{
-	name(parameter);
-	}
-	}
-	}while(status = 1);
+	
+	}while(status ==  1);
 }
 
 int main(){//initializes the shell loop 
@@ -87,4 +83,3 @@ cout<<"bye"<<endl;
 
 return EXIT_SUCCESS;
 }
-
