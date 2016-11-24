@@ -7,9 +7,6 @@
 
 using namespace std;
 
-bool status = 1;
-
-
 class directory{
 public:
 	string title;
@@ -18,49 +15,89 @@ public:
 	string files[50];
 	time_t fcreated[50];
 	int numfiles = 0;
+	directory *parent = NULL;
 	
 	directory(string a){
 	    title = a;
 	}
+
+	directory(string a, directory *b){
+		title = a;
+		parent = b;
+	} 
+	
+	void clear(){
+	this->children.clear();
+	}
+
 };
 
-directory *curr;
+//this is is you just cd, goes to parent unless in root
+/*void cd(directory root, directory *curr, directory **curr){
+	if(curr = &root){
+	return;
+	}
+	else{
+	*curr = *curr->parent;
+	}
 
-void mkfs(void){
-    	map<string,directory>root;
-	root.clear();
-	directory a("root");
-	root.insert(pair<string,directory>("root",a));
-	curr = &a;
+}
+
+//cd to children or parent specifically
+void cd(directory root, directory *curr, directory newdir){
+	if(curr = &root){
+	return;
+	}
+	else{
+		if(newdir.title = curr->parent->title){
+		
+		}
+	}
+
+}*/
+
+
+
+void mkfs(directory dir){
+    	//map<string,directory>root;
+	dir.clear();
+	//directory ("root");
+	//root.insert(pair<string,directory>("root",a));
+	
 	cout<<"System has been formatted"<<endl;
 }
 
-void mkdir(string name){
-string temp = name;
-directory b(temp);
-cout<<"directory "<<b.title<<" created!"<<endl;
-curr->children.insert(pair<string,directory>(temp,b));
-	
+void mkfl(string name, directory *curr){
+
+    curr->files[curr->numfiles] = name;
+    cout<<"file "<<name<<" added to directory "<<curr->title<<endl;
+    curr->numfiles++;
 }
 
+void mkdir(string name, directory *curr){
+string temp = name;
 
-void mkfl(string a){
-    curr->files[curr->numfiles] = a;
-    cout<<a<<" "<<curr->fcreated[curr->numfiles]<<endl;
-    curr->numfiles++;
+//constructor taking name and pointer to parent directory
+directory b(temp, curr);
+
+cout<< "directory " << temp << " created in " << curr->title << endl;
+
+curr->children.insert(pair<string,directory>(name,b));
+
 }
 
 bool exit(){
 return false;
 }
 
-
-void shell_loop(void){
+void shell_loop(directory root, directory *curr, bool format){
+bool status =1;
 string input;
 string command;
-string parameter;
+string parameter = "";
+
 	do{
-	cout<< "My_shell_WANG: ";
+	cout<< "My_shell_3232: ";
 	getline(cin, input);
 	for(int i = 0; i<input.length();i++){
 	//looks for space in command line, assigns command and parameter
@@ -74,24 +111,50 @@ string parameter;
 	}
 }
 	if (command=="exit"){
-	//break;
+	
 	status = exit();
 	}
 	if (command=="mkfs"){
-		mkfs();
+		mkfs(root);
+	}
+	if(command =="mkfl"){
+		mkfl(parameter, curr);
 	}
 	if(command =="mkdir"){
-	mkdir(parameter);
+		mkdir(parameter, curr);
 	}
+	//if(command =="cd"){
+	//	if(parameter==""){cd(root, curr, *curr);}
 
-	
+	//}
 	}while(status ==  1);
 }
 
-int main(){//initializes the shell loop 
+
+
+
+
+int main(){
+
+bool format = 0;
+
+directory rootdir("root");
+directory *curr = &rootdir;
+
+//initializes the shell loop 
 cout<<"Welcome to CSCI 3232 shell file system!\n";
 
-shell_loop();
+shell_loop(rootdir, curr, format);
+
+
+map<string,directory>::iterator it;
+
+directory temp = curr->children.find("food")->second;
+
+curr = &temp;
+
+shell_loop(rootdir, curr, format);
+
 
 cout<<"bye"<<endl;
 
