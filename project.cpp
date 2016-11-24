@@ -43,7 +43,7 @@ public:
 
 }
 
-//cd to children or parent specifically
+//cd  taking parameter to children or parent specifically
 void cd(directory root, directory *curr, directory newdir){
 	if(curr = &root){
 	return;
@@ -145,16 +145,6 @@ directory *curr = &rootdir;
 cout<<"Welcome to CSCI 3232 shell file system!\n";
 
 shell_loop(rootdir, curr, format);
-
-
-map<string,directory>::iterator it;
-
-directory temp = curr->children.find("food")->second;
-
-curr = &temp;
-
-shell_loop(rootdir, curr, format);
-
 
 cout<<"bye"<<endl;
 
