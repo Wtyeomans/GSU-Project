@@ -66,7 +66,15 @@ void mkfs(directory dir){
 	
 	cout<<"System has been formatted"<<endl;
 }
+void ls(string name, directory *curr){
+	
+	curr->files[curr->numfiles] = name;
+	cout<< "ls " << name << " in directory" << curr->numfiles++;;
 
+	
+	
+	
+}
 void mkfl(string name, directory *curr){
 
     curr->files[curr->numfiles] = name;
@@ -122,6 +130,9 @@ string parameter = "";
 	}
 	if(command =="mkdir"){
 		mkdir(parameter, curr);
+	}
+		if(command =="ls"){
+		ls(parameter,curr);
 	}
 	//if(command =="cd"){
 	//	if(parameter==""){cd(root, curr, *curr);}
