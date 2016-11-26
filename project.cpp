@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include <ctime>
+#include <iterator>
 
 using namespace std;
 
@@ -11,7 +12,7 @@ class directory{
 public:
 	string title;
 	time_t created;
-	map <string, directory> children;
+	map <string, directory> children; 
 	string files[50];
 	time_t fcreated[50];
 	int numfiles = 0;
@@ -40,9 +41,7 @@ public:
 	else{
 	*curr = *curr->parent;
 	}
-
 }
-
 //cd  taking parameter to children or parent specifically
 void cd(directory root, directory *curr, directory newdir){
 	if(curr = &root){
@@ -53,7 +52,6 @@ void cd(directory root, directory *curr, directory newdir){
 		
 		}
 	}
-
 }*/
 
 
@@ -68,11 +66,14 @@ void mkfs(directory dir){
 }
 void ls(string name, directory *curr){
 	
-	curr->files[curr->numfiles] = name;
-	cout<< "ls " << name << " in directory" << curr->numfiles++;;
-
+	//curr->files[curr->numfiles] = name;
+	map<string, directory >::iterator i; //part of the map class
+	for (i = curr->children.begin();i != curr->children.end(); ++i){
+		cout<< "Test test";
+	cout<<i->first; 
+							
 	
-	
+	}
 	
 }
 void mkfl(string name, directory *curr){
@@ -161,4 +162,3 @@ cout<<"bye"<<endl;
 
 return EXIT_SUCCESS;
 }
-
