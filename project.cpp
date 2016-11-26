@@ -94,6 +94,14 @@ curr->children.insert(pair<string,directory>(name,b));
 
 }
 
+/*void rmfl(string name, directory *curr){ //still working on this don't touch(Alex)
+    std::map<string, directory>::iterator it;
+    it = children.find(name);
+   if (it != children.end()){
+   children.erase (name);
+   }
+   
+}*/
 bool exit(){
 return false;
 }
@@ -134,6 +142,10 @@ string parameter = "";
 		if(command =="ls"){
 		ls(parameter,curr);
 	}
+		if(command =="rmfl"){
+			rmfl(parameter, curr);
+	}
+		
 	//if(command =="cd"){
 	//	if(parameter==""){cd(root, curr, *curr);}
 
