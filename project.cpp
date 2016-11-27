@@ -69,12 +69,14 @@ void ls(string name, directory *curr){
 	//curr->files[curr->numfiles] = name;
 	map<string, directory >::iterator i; //part of the map class
 	for (i = curr->children.begin();i != curr->children.end(); ++i){
-		cout<< "Test test";
-	cout<<i->first; 
-							
-	
+		
+	cout<<"["<<i->first<<"]"<<"  ";
 	}
 	
+	for(int k = 0; k<curr->numfiles;k++){
+	cout<<curr->files[k]<<" ";
+	}
+	cout<<endl; 
 }
 void mkfl(string name, directory *curr){
 
