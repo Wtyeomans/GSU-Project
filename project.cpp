@@ -16,7 +16,7 @@ public:
 	string files[50];
 	time_t fcreated[50];
 	int numfiles = 0;
-	directory *parent = NULL;
+	directory *parent;
 	
 	directory(string a){
 	    title = a;
@@ -64,7 +64,7 @@ void mkfs(directory dir){
 	
 	cout<<"System has been formatted"<<endl;
 }
-void ls(string name, directory *curr){
+void ls(directory *curr){
 	
 	//curr->files[curr->numfiles] = name;
 	map<string, directory >::iterator i; //part of the map class
@@ -78,6 +78,38 @@ void ls(string name, directory *curr){
 	}
 	cout<<endl; 
 }
+
+void rmdir(string name, directory *curr){
+	bool found = false;
+	map<string, directory >::iterator i;
+	for (i = curr->children.begin();i != curr->children.end(); ++i){
+	if(i->first == name){	
+	curr->children.erase(i);
+	found =true;
+		}
+	}
+	if(found ==false){
+	cout<<"directory: "<<name<<" not found"<<endl;	
+	}
+}
+
+void rmfl(string name, directory *curr){
+	bool found = false;
+	for(int i = 0; i < curr->numfiles; i++){
+		if(curr->files[i] ==name){
+		curr->files[i] = "\0";
+		found =true;
+		
+		}
+	}
+	
+	if(found ==false){
+	cout<<"file: "<<name<<" not found"<<endl;
+	}
+
+}
+
+
 void mkfl(string name, directory *curr){
 
     curr->files[curr->numfiles] = name;
@@ -129,13 +161,35 @@ string parameter = "";
 		mkfs(root);
 	}
 	if(command =="mkfl"){
+		if(parameter == ""){
+		cout<<"command requires parameter"<<endl;
+		}else{
 		mkfl(parameter, curr);
+		}
 	}
 	if(command =="mkdir"){
+		if(parameter == ""){
+		cout<<"command requires parameter"<<endl;
+		}else{
 		mkdir(parameter, curr);
+		}
 	}
 		if(command =="ls"){
-		ls(parameter,curr);
+		ls(curr);
+	}
+	if(command == "rmdir"){
+		if(parameter == ""){
+		cout<<"command requires parameter"<<endl;
+		}else{
+		rmdir(parameter, curr);
+		}
+	}
+	if(command == "rmfl"){
+		if(parameter == ""){
+		cout<<"command requires parameter"<<endl;
+		}else{
+		rmfl(parameter, curr);
+		}
 	}
 	//if(command =="cd"){
 	//	if(parameter==""){cd(root, curr, *curr);}
@@ -159,6 +213,8 @@ directory *curr = &rootdir;
 cout<<"Welcome to CSCI 3232 shell file system!\n";
 
 shell_loop(rootdir, curr, format);
+
+
 
 cout<<"bye"<<endl;
 
