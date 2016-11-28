@@ -55,19 +55,22 @@ void cd(directory root, directory *curr, directory newdir){
 }*/
 
 
-void cd(string name, directory *curr, directory root){
+directory* cd (string name, directory *curr){
    bool found = false;
    
    map<string, directory>::iterator i;
    for (i = curr->children.begin();i != curr->children.end(); ++i){
-       if(i->first == name){	
-	   curr = &root;
+       if(i->first == name){
+	  curr = &(i->second);
+	  cout<<curr->title<<endl;
 	found = true;
-	return;
+	return curr;
    }
    if(found == false){
-       cout<<"Error, no directory with that name to change to"<<endl
-   }
+       cout<<"Error, no directory with that name to change to"<<endl;
+        }
+    }
+    return curr;
 }
 void mkfs(directory dir){
     	//map<string,directory>root;
@@ -208,7 +211,7 @@ string parameter = "";
 		if(parameter==" "){
 		    cout<<"command requires parameter"<<endl;
 		}else{
-		cd(parameter, curr, root);
+		curr = cd(parameter, curr);
 		}
     }
 	}while(status ==  1);
@@ -222,8 +225,9 @@ int main(){
 
 bool format = 0;
 
+directory  *curr;
 directory rootdir("root");
-directory *curr = &rootdir;
+curr = &rootdir;
 
 //initializes the shell loop 
 cout<<"Welcome to CSCI 3232 shell file system!\n";
