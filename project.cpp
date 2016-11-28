@@ -55,7 +55,20 @@ void cd(directory root, directory *curr, directory newdir){
 }*/
 
 
-
+void cd(string name, directory *curr, directory root){
+   bool found = false;
+   
+   map<string, directory>::iterator i;
+   for (i = curr->children.begin();i != curr->children.end(); ++i){
+       if(i->first == name){	
+	   curr = &root;
+	found = true;
+	return;
+   }
+   if(found == false){
+       cout<<"Error, no directory with that name to change to"<<endl
+   }
+}
 void mkfs(directory dir){
     	//map<string,directory>root;
 	dir.clear();
@@ -191,10 +204,13 @@ string parameter = "";
 		rmfl(parameter, curr);
 		}
 	}
-	//if(command =="cd"){
-	//	if(parameter==""){cd(root, curr, *curr);}
-
-	//}
+	if(command =="cd"){
+		if(parameter==" "){
+		    cout<<"command requires parameter"<<endl;
+		}else{
+		cd(parameter, curr, root);
+		}
+    }
 	}while(status ==  1);
 }
 
