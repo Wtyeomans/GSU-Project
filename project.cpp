@@ -43,9 +43,7 @@ public:
 		parent = b;
 	} 
 	
-	void clear(){
-	this->children.clear();
-	}
+
 
 };
 
@@ -67,7 +65,7 @@ directory* cd(directory*curr){
 directory* cd (string name, directory *curr){
    bool found = false;
 	
-  //making sure not to try to go to root parents
+  	//making sure not in root before trying parent
 	if(curr->title != "root"){
 		//trying to go to parent	
 		if(curr->parent->title == name){
@@ -90,7 +88,7 @@ directory* cd (string name, directory *curr){
 	}
 	//no directory of that name
 	if(found == false){
-	cout<<"Error, no directory with that name found"<<endl;
+	cout<<"Error: no directory with that name found"<<endl;
         }
     	//no changes made, returns original curr
    	 return curr;
@@ -98,13 +96,27 @@ directory* cd (string name, directory *curr){
 
 
 
-void mkfs(directory dir){
-  	//making sure root contains nothing
-	dir.clear();
+directory* mkfs(directory root, directory *curr){
+  	
+	//incase already in root directory, clears root
+	if(curr->title == "root"){
+	curr->children.clear();
+	curr->files.clear();
+	cout<<"System Formatted"<<endl;
+	return curr;
+	}
 	
-	
-	cout<<"System has been formatted"<<endl;
+	//moves pointer to root then clears
+	while(curr->title !="root"){
+	curr=curr->parent;
+	}
+	curr->children.clear();
+	curr->files.clear();
+	cout<<"System Formatted"<<endl;
+	return curr;
 }
+	
+
 void ls(directory *curr){
 	
 	//iterates through children map of directories, printing names
@@ -115,7 +127,7 @@ void ls(directory *curr){
 	}
 	
 	//iterates through file map of strings, printing names
-	map<string, file >::iterator t; //part of the map class
+	map<string, file >::iterator t; 
 	for (t = curr->files.begin();t != curr->files.end(); ++t){
 		
 	cout<<t->first<<"  ";
@@ -128,17 +140,26 @@ void ls(directory *curr){
 void rmdir(string name, directory *curr){
 	bool found = false;
 	
-	map<string, directory >::iterator i;
+	//checks if name is file not directory
+	map<string, file >::iterator t; 
+	for (t = curr->files.begin();t != curr->files.end(); ++t){
+		if(t->first == name){
+		cout<<"Error: "<<name<<" is a file, not a directory"<<endl;
+		return;
+		}		
+	}
 	
+	
+	//iterates through map children and deletes if name matches
+	map<string, directory >::iterator i;
 	for (i = curr->children.begin();i != curr->children.end(); ++i){
 		if(i->first == name){
 			//to check if directory is empty	
 			directory temp = i->second;
 			if(temp.children.size()!=0||temp.files.size()!=0){
-			cout<<"Cannot remove non-empty directory"<<endl;
+			cout<<"Error: Cannot remove non-empty directory"<<endl;
 			return;
 			}
-	//deleting child
 		curr->children.erase(i);
 		found =true;
 		break;
@@ -147,12 +168,23 @@ void rmdir(string name, directory *curr){
 
 	//no directory of that name
 	if(found ==false){
-	cout<<"directory: "<<name<<" not found"<<endl;	
+	cout<<"Error: "<<name<<" not found"<<endl;	
 	}
 }
 
 void rmfl(string name, directory *curr){
 	bool found = false;
+	
+	//checks if name directory not a file
+	map<string, directory >::iterator t; 
+	for (t = curr->children.begin();t != curr->children.end(); ++t){
+		if(t->first == name){
+		cout<<"Error: "<<name<<" is a directory, not a file"<<endl;
+		return;
+		}		
+	}
+
+	
 	
 	//iterates through map files and deletes if name matches
 	map<string, file >::iterator i;
@@ -167,7 +199,7 @@ void rmfl(string name, directory *curr){
 	
 	//no file of that name
 	if(found ==false){
-	cout<<"file: "<<name<<" not found"<<endl;
+	cout<<"Error: "<<name<<" not found"<<endl;
 	}
 
 }
@@ -175,20 +207,59 @@ void rmfl(string name, directory *curr){
 
 void mkfl(string name, directory *curr){
 	
+	//checking if name is used for directory
+	map<string, directory >::iterator i; 
+	for (i = curr->children.begin();i != curr->children.end(); ++i){
+		if(i->first ==name){
+		cout<<"Error: name already used for a Directory"<<endl;
+		return;
+		}
+	}
+	
+	//checking if name used for a file
+	map<string, file >::iterator t; 
+	for (t = curr->files.begin();t != curr->files.end(); ++t){
+		if(t->first ==name){
+		cout<<"Error: name already used for a File"<<endl;
+		return;
+		}
+	
+	}
+	
 	//inserts name as key and temp as actual file
 	file temp(name);
 	curr->files.insert(pair<string,file>(name, temp));
+
+	cout<< "File " << name << " created in " << curr->title << endl;
 }
 
 void mkdir(string name, directory *curr){
-	string temp = name;
+
+	//checking if name is used for directory
+	map<string, directory >::iterator i; 
+	for (i = curr->children.begin();i != curr->children.end(); ++i){
+		if(i->first ==name){
+		cout<<"Error: name already used for a Directory"<<endl;
+		return;
+		}
+	}
+	
+	//checking if name used for a file
+	map<string, file >::iterator t; 
+	for (t = curr->files.begin();t != curr->files.end(); ++t){
+		if(t->first ==name){
+		cout<<"Error: name already used for a File"<<endl;
+		return;
+		}
+	
+	}
 
 	//constructor taking name and pointer to parent directory
-	directory b(temp, curr);
+	directory b(name, curr);
 	//adding directory with key as passed name
 	curr->children.insert(pair<string,directory>(name,b));
 
-	cout<< "directory " << temp << " created in " << curr->title << endl;
+	cout<< "Directory " << name << " created in " << curr->title << endl;
 }
 
 bool exit(){
@@ -196,7 +267,7 @@ bool exit(){
 	return false;
 }
 
-void shell_loop(directory root, directory *curr){
+void shell_loop(directory rootdir, directory *curr){
 bool status =1;
 bool format = 0;
 string input;
@@ -223,10 +294,10 @@ string parameter = "";
 	status = exit();
 	}
 	else if (command=="mkfs"){
-		mkfs(root);
+		curr = mkfs(rootdir, curr);
 		format = 1;
 	}
-	else if(command =="mkfl" && format == 1){
+	else if(command =="mkfile" && format == 1){
 		if(parameter == ""){
 		cout<<"command requires parameter"<<endl;
 		}else{
@@ -250,7 +321,7 @@ string parameter = "";
 		rmdir(parameter, curr);
 		}
 	}
-	else if(command == "rmfl" && format == 1){
+	else if(command == "rmfile" && format == 1){
 		if(parameter == ""){
 		cout<<"command requires parameter"<<endl;
 		}else{
@@ -268,7 +339,7 @@ string parameter = "";
 	cout<<"Must format File System: Enter mkfs"<<endl;
 	}
 	else{
-	cout<<"command not recognized"<<endl;
+	cout<<"command "<< command<< " not recognized"<<endl;
 	}
 	}while(status ==  1);
 }
@@ -292,7 +363,7 @@ shell_loop(rootdir, curr);
 
 
 
-cout<<"System Ended"<<endl;
+cout<<"System Exit"<<endl;
 
 return EXIT_SUCCESS;
 }
