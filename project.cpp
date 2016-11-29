@@ -369,7 +369,7 @@ string parameter = "";
 		curr = cd(parameter, curr);
 		}
     	}
-	if(command == "stat"){
+	else if(command == "stat"){
 		if(parameter == ""){
 			cout<<"command requires parameter"<<endl;
 		}
