@@ -278,6 +278,7 @@ void stat(string name, directory *curr){
 	
 			found =true;
 			break;
+			return;
 		}
 	}
 	//find the directory or...
@@ -289,6 +290,7 @@ void stat(string name, directory *curr){
 			cout<<"Directory ["<<temps.title<<"] created at "<<td<<endl;
 		found =true;
 		break;
+		return;
 		}
 	}//the file/directory does not exist
 	if(found ==false){
