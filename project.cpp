@@ -14,7 +14,7 @@ public:
 	time_t created;
 
 	file(string a){
-	title = a;
+		title = a;
 	}
 
 
@@ -189,24 +189,25 @@ void rmfl(string name, directory *curr){
 	//iterates through map files and deletes if name matches
 	map<string, file >::iterator i;
 	for (i = curr->files.begin();i != curr->files.end(); ++i){
-	if(i->first == name){	
-	curr->files.erase(i);
+		if(i->first == name){	
+			curr->files.erase(i);
 	
-	found =true;
-	break;
-	}
+			found =true;
+			break;
+		}
 	}
 	
-	//no file of that name
+		//no file of that name
 	if(found ==false){
-	cout<<"Error: "<<name<<" not found"<<endl;
+		cout<<"Error: "<<name<<" not found"<<endl;
 	}
 
 }
 
 
 void mkfl(string name, directory *curr){
-	
+	time_t now=time(0);
+	char* dt=ctime(&now);
 	//checking if name is used for directory
 	map<string, directory >::iterator i; 
 	for (i = curr->children.begin();i != curr->children.end(); ++i){
@@ -228,13 +229,15 @@ void mkfl(string name, directory *curr){
 	
 	//inserts name as key and temp as actual file
 	file temp(name);
+	temp.created=now;
 	curr->files.insert(pair<string,file>(name, temp));
-
-	cout<< "File " << name << " created in " << curr->title << endl;
+	
+	cout<< "File " << name << " created in " << curr->title <<" at "<<dt<<endl;
 }
 
 void mkdir(string name, directory *curr){
-
+	time_t now=time(0);
+	char* dt=ctime(&now);
 	//checking if name is used for directory
 	map<string, directory >::iterator i; 
 	for (i = curr->children.begin();i != curr->children.end(); ++i){
@@ -256,10 +259,41 @@ void mkdir(string name, directory *curr){
 
 	//constructor taking name and pointer to parent directory
 	directory b(name, curr);
+	b.created=now;
 	//adding directory with key as passed name
 	curr->children.insert(pair<string,directory>(name,b));
 
-	cout<< "Directory " << name << " created in " << curr->title << endl;
+	cout<< "Directory " << name << " created in " << curr->title <<" at "<<dt<<endl;
+}
+
+void stat(string name, directory *curr){
+	bool found = false;
+	//find the file or... 
+	map<string, file >::iterator i;
+	for (i = curr->files.begin();i != curr->files.end(); ++i){
+		if(i->first == name){	
+			file temp=i->second;
+			char* dt=ctime(&temp.created);
+			cout<<"File "<<temp.title<<" created at "<<dt<<endl;
+	
+			found =true;
+			break;
+		}
+	}
+	//find the directory or...
+	map<string, directory >::iterator t;
+	for (t = curr->children.begin();t != curr->children.end(); ++t){
+		if(t->first == name){
+			directory temps =t->second;
+			char* td=ctime(&temps.created);
+			cout<<"Directory ["<<temps.title<<"] created at "<<td<<endl;
+		found =true;
+		break;
+		}
+	}//the file/directory does not exist
+	if(found ==false){
+		cout<<"Directory or file \""<<name<<"\" not found"<<endl;	
+	}
 }
 
 bool exit(){
@@ -335,6 +369,14 @@ string parameter = "";
 		curr = cd(parameter, curr);
 		}
     	}
+	if(command == "stat"){
+		if(parameter == ""){
+			cout<<"command requires parameter"<<endl;
+		}
+		else{
+			stat(parameter, curr);
+		}
+	}
 	else if(format == 0){
 	cout<<"Must format File System: Enter mkfs"<<endl;
 	}
