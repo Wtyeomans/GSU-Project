@@ -237,6 +237,14 @@ void mkfl(string name, directory *curr){
 void mkdir(string name, directory *curr){
 	time_t now=time(0);//time is set to zero
 	char* dt=ctime(&now);//time now is assigned to pointer char dt
+	
+	//makes sure cannot name child same as parent
+	if(curr->title == name){
+	cout<<"Error: Cannot name Directory same title as Parent Directory"<<endl;
+	return;
+	}
+
+
 	//checking if name is used for directory
 	map<string, directory >::iterator i; //decleration of iterator i
 	for (i = curr->children.begin();i != curr->children.end(); ++i){//iterates through map children
