@@ -371,8 +371,8 @@ string parameter = "";//decleration and assignment of string parameter
 		curr = cd(parameter, curr);
 		}
     	}
-	else if(command == "stat" && parameter == 1){//incase no parameter is entered with method stat
-		//if(parameter == ""){
+	else if(command == "stat"){//incase no parameter is entered with method stat
+		if(parameter == ""){
 			cout<<"command requires parameter"<<endl;
 		}
 		else{
