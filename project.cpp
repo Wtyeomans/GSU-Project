@@ -1,3 +1,4 @@
+//members of group are Chris Pool, Thomas Yeomans, Michael Henning, and Alexander Cockrum 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
