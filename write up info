@@ -32,4 +32,4 @@ o	Chris Poole
 o	Michael Henning
 	Writing code for ls, exit, the makefile, and helped create the searching loops and implementing time components.
 o	Thomas Yeomans
-	Writing code for mkfs, mkdir, mkfl, rmfl, and the file class.
+	Writing code for mkfs, mkdir, creating the file class with corresponding functions mkfile and rmfile.  
